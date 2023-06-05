@@ -117,13 +117,13 @@ impl Iterator for PublicDirIterator {
                 Ok(dir) => return Some(Ok(dir)),
                 Err(err) => return Some(Err(err)),
             }
-        };
+        }
         None
     }
 }
 
 pub trait DirEntryIterator:
-From<fs::ReadDir> + Iterator<Item=Result<fs::DirEntry, io::Error>>
+    From<fs::ReadDir> + Iterator<Item = Result<fs::DirEntry, io::Error>>
 {
     fn for_path<P: AsRef<Path>>(path: P) -> io::Result<Self> {
         let read_dir = fs::read_dir(path.as_ref())?;
