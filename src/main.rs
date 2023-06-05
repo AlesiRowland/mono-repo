@@ -2,7 +2,6 @@
 mod cli;
 mod execution;
 mod file_system;
-mod strategies;
 mod visitors;
 
 use clap::Parser;

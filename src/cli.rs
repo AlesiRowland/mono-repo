@@ -6,7 +6,7 @@ use std::path::Path;
 
 use crate::file_system::files::{FileRemover, TMP};
 use crate::file_system::services::ServiceEditor;
-use crate::strategies::poetry::{StringReplacer, PYPROJECT_TOML};
+use crate::visitors::poetry::{StringReplacer, PYPROJECT_TOML};
 use clap::{Parser, Subcommand};
 
 const AUTHOR: &str = "Alesi Rowland";
