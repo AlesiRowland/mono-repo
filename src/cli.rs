@@ -1,12 +1,6 @@
 //! # Cli Declaration.
 //!
 //! This module contains the declaration of the Cli, using clap.
-use std::env;
-use std::path::Path;
-
-use crate::file_system::files::{FileRemover, TMP};
-use crate::file_system::services::ServiceEditor;
-use crate::visitors::poetry::{StringReplacer, PYPROJECT_TOML};
 use clap::{Parser, Subcommand};
 
 const AUTHOR: &str = "Alesi Rowland";

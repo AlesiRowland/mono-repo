@@ -5,8 +5,9 @@ use std::env;
 use std::path::Path;
 
 use crate::cli::{Cli, DepCommands, PoetryCommands, Tools};
-use crate::file_system::files::{FileRemover, TMP};
+use crate::file_system::files::TMP;
 use crate::file_system::services::ServiceEditor;
+use crate::visitors::crud::FileRemover;
 use crate::visitors::poetry::{StringReplacer, PYPROJECT_TOML};
 
 fn get_service_root(service_root: &Option<String>) -> Box<Path> {

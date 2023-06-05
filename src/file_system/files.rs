@@ -105,11 +105,3 @@ impl<E: FileContentsEditor> FileVisitor for E {
         edit_file(path, |contents| self.edit(contents))
     }
 }
-
-pub struct FileRemover;
-
-impl FileVisitor for FileRemover {
-    fn visit_file(&self, path: &impl AsRef<Path>) -> Result<(), Box<dyn error::Error>> {
-        fs::remove_file(path).map_err(|err| err.into())
-    }
-}
