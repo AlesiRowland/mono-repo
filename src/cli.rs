@@ -23,6 +23,11 @@ pub enum Tools {
         command: PoetryCommands,
     },
 
+    Rm {
+        file_name: String,
+        #[arg(short, long)]
+        service_root: Option<String>,
+    },
     Clean {
         #[arg(short, long)]
         service_root: Option<String>,

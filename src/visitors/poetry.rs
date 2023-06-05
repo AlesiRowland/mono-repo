@@ -9,6 +9,7 @@ fn create_regex(package_name: &str) -> Result<Regex, regex::Error> {
     Regex::new(reg_string.as_str())
 }
 
+#[derive(Debug)]
 pub struct StringReplacer {
     regex: Regex,
     repl: String,

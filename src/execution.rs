@@ -33,11 +33,18 @@ fn execute_update(package_name: &str, version: &str, service_root: &Option<Strin
     service_editor.accept_command(&visitor);
 }
 
-fn execute_rm(package_name: &str, service_root: &Option<String>) {
+fn execute_version_rm(package_name: &str, service_root: &Option<String>) {
     let visitor = StringReplacer::package_remover(package_name.into())
         .expect("Could not compile regex for removing package.");
     let service_root = get_service_root(service_root);
     let service_editor = ServiceEditor::new(service_root, PYPROJECT_TOML.to_string());
+    service_editor.accept_command(&visitor);
+}
+
+fn execute_rm(file_name: &str, service_root: &Option<String>) {
+    let visitor = FileRemover;
+    let service_root = get_service_root(service_root);
+    let service_editor = ServiceEditor::new(service_root, file_name.into());
     service_editor.accept_command(&visitor);
 }
 
@@ -55,6 +62,10 @@ impl Executable for Tools {
     fn execute(&self) {
         match self {
             Tools::Poetry { command } => command.execute(),
+            Tools::Rm {
+                file_name,
+                service_root,
+            } => execute_version_rm(&file_name, &service_root),
             Tools::Clean { service_root } => execute_clean(service_root),
         }
     }
@@ -79,7 +90,7 @@ impl Executable for DepCommands {
             DepCommands::Rm {
                 package_name,
                 service_root,
-            } => execute_rm(package_name, service_root),
+            } => execute_version_rm(package_name, service_root),
         };
     }
 }

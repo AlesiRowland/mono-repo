@@ -1,18 +1,18 @@
-use std::fs;
-use std::error::Error;
-use std::path::Path;
 use crate::file_system::files::FileVisitor;
+use std::error::Error;
+use std::fs;
+use std::path::Path;
 
 #[cfg(test)]
 mod tests {
+    use crate::file_system::files::FileVisitor;
+    use crate::visitors::crud::FileRemover;
     use std::fs::File;
     use std::io;
     use tempdir::TempDir;
-    use crate::file_system::files::FileVisitor;
-    use crate::visitors::crud::FileRemover;
 
     #[test]
-    fn test_file_remover_visit_file() -> Result<(), io::Error>{
+    fn test_file_remover_visit_file() -> Result<(), io::Error> {
         let tempdir = TempDir::new("test")?;
         let path = tempdir.path().join("tmp");
         File::create(&path)?;
@@ -21,7 +21,6 @@ mod tests {
         let right = false;
         assert_eq!(left, right);
         Ok(())
-
     }
 }
 pub struct FileRemover;
