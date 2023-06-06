@@ -1,17 +1,12 @@
 //! # Execution logic for the Cli.
 //!
 //! Applies the Executor trait to the structs/enums of the CLI.
-use std::collections::VecDeque;
 use std::env;
 use std::path::Path;
-use std::process::Command;
-use clap::Error;
-use clap::error::ErrorKind;
 
 use crate::cli::{Cli, DepCommands, PoetryCommands, Tools};
 use crate::file_system::files::TMP;
 use crate::file_system::services::ServiceEditor;
-use crate::visitors::crud::FileRemover;
 use crate::visitors::poetry::{StringReplacer, PYPROJECT_TOML};
 
 fn get_service_root(service_root: &Option<String>) -> Box<Path> {
@@ -22,10 +17,11 @@ fn get_service_root(service_root: &Option<String>) -> Box<Path> {
 }
 
 fn execute_clean(service_root: &Option<String>) {
+    let program = "rm";
+    let args: [String; 2] = ["rm".to_string(), TMP.to_string()];
     let service_root = get_service_root(service_root);
-    let visitor = FileRemover;
     let service_editor = ServiceEditor::new(service_root);
-    service_editor.accept_file_visitor(TMP, &visitor);
+    service_editor.run_program(&program, &args).unwrap();
 }
 
 fn execute_update(package_name: &str, version: &str, service_root: &Option<String>) {
@@ -43,13 +39,6 @@ fn execute_version_rm(package_name: &str, service_root: &Option<String>) {
     let service_root = get_service_root(service_root);
     let service_editor = ServiceEditor::new(service_root);
     service_editor.accept_file_visitor(PYPROJECT_TOML, &visitor);
-}
-
-fn execute_rm(file_name: &str, service_root: &Option<String>) {
-    let visitor = FileRemover;
-    let service_root = get_service_root(service_root);
-    let service_editor = ServiceEditor::new(service_root);
-    service_editor.accept_file_visitor(file_name, &visitor);
 }
 
 fn execute_program(program: &str, args: &[String], service_root: &Option<String>) {
@@ -74,10 +63,6 @@ impl Executable for Tools {
             Tools::Poetry { command } => command.execute(),
             Tools::Run { program, args, service_root } => execute_program(program, args,
                                                                           service_root),
-            Tools::Rm {
-                file_name,
-                service_root,
-            } => execute_version_rm(&file_name, &service_root),
             Tools::Clean { service_root } => execute_clean(service_root),
         }
     }

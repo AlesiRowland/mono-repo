@@ -1,3 +1,2 @@
-pub mod crud;
 pub mod poetry;
-mod cmd;
+pub(crate) mod base;

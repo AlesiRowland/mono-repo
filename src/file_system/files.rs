@@ -88,20 +88,5 @@ where
             println!("Warning: Unable to remove tmp file when editing {}", &to)
         }
     }
-
     Ok(())
-}
-
-pub trait FileVisitor {
-    fn visit_file(&self, path: &impl AsRef<Path>) -> Result<(), Box<dyn error::Error>>;
-}
-
-pub trait FileContentsEditor {
-    fn edit(&self, contents: &str) -> Result<String, Box<dyn error::Error>>;
-}
-
-impl<E: FileContentsEditor> FileVisitor for E {
-    fn visit_file(&self, path: &impl AsRef<Path>) -> Result<(), Box<dyn error::Error>> {
-        edit_file(path, |contents| self.edit(contents))
-    }
 }

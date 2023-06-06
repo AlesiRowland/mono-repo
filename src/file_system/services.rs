@@ -1,11 +1,10 @@
-use std::collections::VecDeque;
 use crate::file_system::directories::{DirEntryIterator, PublicDirIterator};
-use crate::file_system::files::FileVisitor;
+use crate::visitors::base::FileVisitor;
 use std::io;
 use std::io::Write;
 use std::path::Path;
 use std::process::Command;
-use clap::error::{Error, ErrorKind};
+use clap::error::Error;
 
 pub struct ServiceEditor<P: AsRef<Path>> {
     service_root: P,
@@ -59,7 +58,7 @@ impl<P: AsRef<Path>> ServiceEditor<P> {
     }
 
     pub fn run_program(&self, program: &str, args: &[String]) -> Result<(), Error> {
-        let mut cmd = self.create_cmd(program, args)?;
+        let cmd = self.create_cmd(program, args)?;
         self.run_command(cmd).unwrap();
         Ok(())
     }

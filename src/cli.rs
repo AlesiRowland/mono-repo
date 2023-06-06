@@ -1,7 +1,6 @@
 //! # Cli Declaration.
 //!
 //! This module contains the declaration of the Cli, using clap.
-use std::collections::VecDeque;
 use clap::{Parser, Subcommand};
 
 const AUTHOR: &str = "Alesi Rowland";
@@ -27,11 +26,6 @@ pub enum Tools {
         program: String,
         #[arg(trailing_var_arg = true)]
         args: Vec<String>,
-        #[arg(short, long)]
-        service_root: Option<String>,
-    },
-    Rm {
-        file_name: String,
         #[arg(short, long)]
         service_root: Option<String>,
     },

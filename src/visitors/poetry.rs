@@ -1,4 +1,4 @@
-use crate::file_system::files::FileContentsEditor;
+use crate::visitors::base::FileContentsEditor;
 use regex::Regex;
 use std::error::Error;
 
