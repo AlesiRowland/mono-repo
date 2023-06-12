@@ -1,2 +1,2 @@
-pub mod poetry;
 pub(crate) mod base;
+pub mod poetry;

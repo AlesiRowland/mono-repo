@@ -61,8 +61,11 @@ impl Executable for Tools {
     fn execute(&self) {
         match self {
             Tools::Poetry { command } => command.execute(),
-            Tools::Run { program, args, service_root } => execute_program(program, args,
-                                                                          service_root),
+            Tools::Run {
+                program,
+                args,
+                service_root,
+            } => execute_program(program, args, service_root),
             Tools::Clean { service_root } => execute_clean(service_root),
         }
     }

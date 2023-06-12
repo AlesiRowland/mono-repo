@@ -1,10 +1,10 @@
-use crate::file_system::directories::{DirEntryIterator, PublicDirIterator};
+use crate::file_system::directories::create_service_iterator;
 use crate::visitors::base::FileVisitor;
+use clap::error::Error;
 use std::io;
 use std::io::Write;
 use std::path::Path;
 use std::process::Command;
-use clap::error::Error;
 
 pub struct ServiceEditor<P: AsRef<Path>> {
     service_root: P,
@@ -12,17 +12,11 @@ pub struct ServiceEditor<P: AsRef<Path>> {
 
 impl<P: AsRef<Path>> ServiceEditor<P> {
     pub fn new(service_root: P) -> Self {
-        ServiceEditor {
-            service_root,
-        }
-    }
-
-    fn create_iterator(&self) -> io::Result<PublicDirIterator> {
-        Ok(PublicDirIterator::for_path(&self.service_root)?)
+        ServiceEditor { service_root }
     }
 
     pub fn accept_file_visitor(&self, file_name: &str, visitor: &impl FileVisitor) {
-        let dir_iterator = self.create_iterator().unwrap();
+        let dir_iterator = create_service_iterator(&self.service_root).unwrap();
 
         for dir_result in dir_iterator {
             let dir_entry = dir_result.unwrap();
@@ -45,15 +39,14 @@ impl<P: AsRef<Path>> ServiceEditor<P> {
         Ok(command)
     }
 
-
-    pub fn run_command(&self, mut cmd: Command) -> io::Result<()>{
-        let dir_iterator = self.create_iterator().unwrap();
+    pub fn run_command(&self, mut cmd: Command) -> io::Result<()> {
+        let dir_iterator = create_service_iterator(&self.service_root).unwrap();
         for dir_result in dir_iterator {
             let dir_entry = dir_result?;
             let output = cmd.current_dir(&dir_entry.path()).output()?;
             io::stdout().write_all(&output.stdout).unwrap();
             io::stderr().write_all(&output.stderr).unwrap();
-        };
+        }
         Ok(())
     }
 
